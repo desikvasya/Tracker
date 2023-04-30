@@ -8,7 +8,7 @@
 import UIKit
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
-    weak var delegate: TrackersViewController?
+    weak var delegate: TrackerViewController?
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -86,27 +86,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return view
     }()
 }
-
-// MARK: - Configuration
-
-//extension TrackerCollectionViewCell {
-//    func configure(with model: Tracker?) {
-//        trackerLabel.text = model?.label
-//        dayLabel.text = model != nil ? "?? день" : nil
-//        emojiLabel.text = model?.emoji
-//
-//        colorBackground.backgroundColor = model?.color.uiColor
-//        addButton.backgroundColor = model?.color.uiColor
-//    }
-//}
-
-// MARK: - Actions
-
-//private extension TrackerCollectionViewCell {
-//    @objc func doneTapped() {
-//        delegate?.trackerMarkedCompleted(self)
-//    }
-//}
 
 // MARK: - Appearance
 

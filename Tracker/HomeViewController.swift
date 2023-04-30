@@ -47,7 +47,7 @@ private extension HomeViewController {
     func setupTabs() {
         tabBar.backgroundColor = UIColor.white
         
-        let trackerVC = UINavigationController(rootViewController: TrackersViewController())
+        let trackerVC = UINavigationController(rootViewController: TrackerViewController())
         let statisticVC = UINavigationController(rootViewController: StatisticsViewController())
         let controllers = [trackerVC, statisticVC]
         viewControllers = controllers
@@ -56,10 +56,10 @@ private extension HomeViewController {
         let textAttributes = [NSAttributedString.Key.font: font]
         
         trackerVC.tabBarItem.setTitleTextAttributes(textAttributes, for: .normal)
-        trackerVC.tabBarItem = UITabBarItem(title: "Trackers", image: UIImage(named: "trackerTabIcon"), selectedImage: nil)
+        trackerVC.tabBarItem = UITabBarItem(title: "Трекеры", image: UIImage(named: "trackerTabIcon"), selectedImage: nil)
 
         statisticVC.tabBarItem.setTitleTextAttributes(textAttributes, for: .normal)
-        statisticVC.tabBarItem = UITabBarItem(title: "Statistics", image: UIImage(named: "statisticsTabIcon"), selectedImage: nil)
+        statisticVC.tabBarItem = UITabBarItem(title: "Cтатистика", image: UIImage(named: "statisticsTabIcon"), selectedImage: nil)
 
       
         tabBar.layer.shadowColor = UIColor.black.cgColor

@@ -3,36 +3,33 @@
 //  Tracker
 //
 //  Created by Denis on 17.04.2023.
-//
 
 import UIKit
 
-final class TrackersViewController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate {
+final class TrackerViewController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate {
 
-    
+
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-    
-//    private var categories: [TrackerCategory] = []
-    
+
     private lazy var placeholderView: UIView = .placeholderView(
         message: "Что будем отслеживать?",
         icon: .trackerStartPlaceholder
     )
-    
+
     internal
-    
-    
+
+
     // MARK: - Init
-    
+
     init() {
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
+
+
     // MARK: - LifeCycle
 
     override func viewWillLayoutSubviews() {
@@ -46,11 +43,10 @@ final class TrackersViewController: UIViewController, UISearchControllerDelegate
         configureNavigationBar()
         addPlaceholder()
     }
-    
-    
+
     @objc private func addNewTracker() {
         let vc = NewTrackerViewController()
-        vc.trackersViewController = self
+        vc.trackerVC = self
         present(vc, animated: true)
     }
 
@@ -97,28 +93,6 @@ final class TrackersViewController: UIViewController, UISearchControllerDelegate
         return search
     }()
 
-//    private lazy var collectionView: UICollectionView = {
-//        let collection = UICollectionView(
-//            frame: .zero,
-//            collectionViewLayout: UICollectionViewCompositionalLayout.trackers
-//        )
-//
-//        collection.keyboardDismissMode = .onDrag
-//        collection.contentInset = .init(top: 10, left: 0, bottom: 0, right: 0)
-//
-//        collection.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-//
-//        collection.register(
-//            YPSectionHeaderCollectionView.self,
-//            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-//            withReuseIdentifier: "\(YPSectionHeaderCollectionView.self)"
-//        )
-//
-//        collection.alwaysBounceVertical = true
-//
-//        return collection
-//    }()
-
     private lazy var startPlaceholderView: UIView = {
         let view = UIView.placeholderView(
             message: "Что будем отслеживать?",
@@ -145,7 +119,7 @@ final class TrackersViewController: UIViewController, UISearchControllerDelegate
 
 // MARK: - Appearance
 
-private extension TrackersViewController {
+private extension TrackerViewController {
 
     func configureNavigationBar() {
         title = "Трекеры"
@@ -170,18 +144,17 @@ private extension TrackersViewController {
     }
 }
 
-private extension TrackersViewController {
+private extension TrackerViewController {
     func addPlaceholder() {
         view.backgroundColor = .white
         view.addSubview(placeholderView)
-        
+
         let safeArea = view.safeAreaLayoutGuide
-        
+
         NSLayoutConstraint.activate([
             placeholderView.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
             placeholderView.centerYAnchor.constraint(equalTo: safeArea.centerYAnchor)
         ])
     }
 }
-
 

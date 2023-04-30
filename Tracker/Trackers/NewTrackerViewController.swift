@@ -9,7 +9,7 @@ import UIKit
 
 final class NewTrackerViewController: UIViewController {
     
-    var trackersViewController: TrackersViewController?
+    var trackerVC: TrackerViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,12 +24,11 @@ final class NewTrackerViewController: UIViewController {
             label.textColor = .black
             label.translatesAutoresizingMaskIntoConstraints = false
             label.font = UIFont.asset(.ysDisplayMedium, size: 16.0)
-
+            
             return label
         }()
         
-        
-         lazy var habitButton: UIButton = {
+        lazy var habitButton: UIButton = {
             let button = UIButton(type: .custom)
             button.backgroundColor = .black
             button.layer.cornerRadius = 16
@@ -37,24 +36,24 @@ final class NewTrackerViewController: UIViewController {
             button.setTitle("Привычка", for: .normal)
             button.translatesAutoresizingMaskIntoConstraints = false
             button.titleLabel?.font = font
+            button.addTarget(self, action: #selector(habitButtonTapped), for: .touchUpInside)
+            return button
+        }()
 
+        
+        let eventButton: UIButton = {
+            let button = UIButton(type: .custom)
+            button.backgroundColor = .black
+            button.layer.cornerRadius = 16
+            let font = UIFont.asset(.ysDisplayMedium, size: 16.0)
+            button.setTitle("Нерегулярное событие", for: .normal)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.titleLabel?.font = font
+            button.addTarget(self, action: #selector(eventButtonTapped), for: .touchUpInside)
             return button
         }()
         
-        lazy var eventButton: UIButton = {
-           let button = UIButton(type: .custom)
-           button.backgroundColor = .black
-           button.layer.cornerRadius = 16
-           let font = UIFont.asset(.ysDisplayMedium, size: 16.0)
-           button.setTitle("Нерегулярное событие", for: .normal)
-           button.translatesAutoresizingMaskIntoConstraints = false
-           button.titleLabel?.font = font
-
-           return button
-       }()
-
         let safeArea = view.safeAreaLayoutGuide
-
         
         view.backgroundColor = .white
         view.addSubview(eventButton)
@@ -75,7 +74,25 @@ final class NewTrackerViewController: UIViewController {
         ])
     }
     
+    @objc private func habitButtonTapped() {
+        let vc = TrackerConfigViewController()
+        print("tapped")
+        if let delegate = self.trackerVC as? CreateTrackerVCDelegate {
+            vc.delegate = delegate
+            self.present(vc, animated: true)
+        } else {
+            print("trackerVC is not of type CreateTrackerVCDelegate")
+        }
+    }
+
     
-    
-    
+
+    @objc private func eventButtonTapped() {
+        print("tapped")
+        self.dismiss(animated: true)
+        
+    }
 }
+
+
+
