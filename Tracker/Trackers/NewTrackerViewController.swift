@@ -7,9 +7,15 @@
 
 import UIKit
 
-final class NewTrackerViewController: UIViewController {
+final class NewTrackerViewController: UIViewController, CreateTrackerVCDelegate {
+    func didCreateNewTracker(newCategory: TrackerCategory) {
+        delegate?.didCreateNewTracker(newCategory: newCategory)
+    }
+    
     
     var trackerVC: TrackerViewController?
+    weak var delegate: CreateTrackerVCDelegate?
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,23 +80,38 @@ final class NewTrackerViewController: UIViewController {
         ])
     }
     
-    @objc private func habitButtonTapped() {
-        let vc = TrackerConfigViewController()
-        print("tapped")
-        if let delegate = self.trackerVC as? CreateTrackerVCDelegate {
-            vc.delegate = delegate
-            self.present(vc, animated: true)
-        } else {
-            print("trackerVC is not of type CreateTrackerVCDelegate")
-        }
-    }
-
-    
-
+//    @objc private func habitButtonTapped() {
+//        let vc = TrackerConfigViewController()
+//        print("tapped")
+//        if let delegate = self.trackerVC as? CreateTrackerVCDelegate {
+//            vc.delegate = delegate
+//            self.present(vc, animated: true)
+//        } else {
+//            print("trackerVC is not of type CreateTrackerVCDelegate")
+//        }
+//    }
+//
+//
+//
     @objc private func eventButtonTapped() {
         print("tapped")
         self.dismiss(animated: true)
-        
+
+    }
+    
+    @objc private func habitButtonTapped() {
+        let vc = TrackerConfigViewController()
+        print("tapped")
+        vc.delegate = self
+        self.present(vc, animated: true)
+    }
+
+}
+
+extension TrackerViewController: CreateTrackerVCDelegate {
+    func didCreateNewTracker(newCategory: TrackerCategory) {
+        // Handle the newly created tracker category here
+        // For example, you could add it to a collection view or reload the data
     }
 }
 
