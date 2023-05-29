@@ -7,6 +7,11 @@
 import UIKit
 
 final class TrackerViewController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate {
+    
+    var choosenDay = "" // день в формате "понедельник"
+    
+    var dateString = "" // день в формате "2023/05/07"
+
 
 
     private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -41,7 +46,21 @@ final class TrackerViewController: UIViewController, UISearchControllerDelegate,
 
         setupAppearance()
         configureNavigationBar()
-        addPlaceholder()
+
+        // Add placeholder view to the view hierarchy
+        view.addSubview(placeholderView)
+
+        // Set up search bar constraints
+        view.addSubview(searchController.searchBar)
+        searchController.searchBar.translatesAutoresizingMaskIntoConstraints = false
+            
+        NSLayoutConstraint.activate([
+            placeholderView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            placeholderView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            searchController.searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchController.searchBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            searchController.searchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
     }
 
     @objc private func addNewTracker() {
@@ -84,14 +103,31 @@ final class TrackerViewController: UIViewController, UISearchControllerDelegate,
 //        return picker
 //    }()
 
-    private lazy var searchField: UISearchController = {
-        let search = UISearchController()
+//    private lazy var searchField: UISearchController = {
+//        let search = UISearchController()
+//
+//        search.delegate = self
+//        search.searchBar.delegate = self
+//
+//        return search
+//    }()
+    
+    let searchController: UISearchController = {
+        let searchController = UISearchController(searchResultsController: nil)
+        let searchBar = searchController.searchBar
 
-        search.delegate = self
-        search.searchBar.delegate = self
+        searchBar.placeholder = "Поиск"
+        searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
 
-        return search
+        if let cancelButton = searchBar.subviews.first(where: { $0 is UIButton }) as? UIButton {
+            cancelButton.setTitle("Отменить", for: .normal)
+        }
+
+
+        return searchController
     }()
+
 
     private lazy var startPlaceholderView: UIView = {
         let view = UIView.placeholderView(
@@ -123,19 +159,22 @@ private extension TrackerViewController {
 
     func configureNavigationBar() {
         title = "Трекеры"
-
+        
         navigationItem.leftBarButtonItem = addButton
 //        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: datePicker)
-        navigationItem.searchController = searchField
+        navigationItem.searchController = searchController
     }
+
 
     func setupAppearance() {
         view.backgroundColor = .white
 
+        view.addSubview(collectionView)
         view.addSubview(startPlaceholderView)
         view.addSubview(emptyPlaceholderView)
 
         NSLayoutConstraint.activate([
+//            datePicker.widthAnchor.constraint(lessThanOrEqualToConstant: 100),
             startPlaceholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             startPlaceholderView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyPlaceholderView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -147,14 +186,29 @@ private extension TrackerViewController {
 private extension TrackerViewController {
     func addPlaceholder() {
         view.backgroundColor = .white
-        view.addSubview(placeholderView)
-
-        let safeArea = view.safeAreaLayoutGuide
+        
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(container)
+        
+        container.addSubview(placeholderView)
+        container.addSubview(searchController.searchBar)
 
         NSLayoutConstraint.activate([
-            placeholderView.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
-            placeholderView.centerYAnchor.constraint(equalTo: safeArea.centerYAnchor)
+            container.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            container.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            searchController.searchBar.topAnchor.constraint(equalTo: container.topAnchor),
+            searchController.searchBar.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            searchController.searchBar.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            
+            placeholderView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            placeholderView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -16),
+            placeholderView.topAnchor.constraint(greaterThanOrEqualTo: searchController.searchBar.bottomAnchor, constant: 16)
         ])
     }
 }
+
+
+
 
